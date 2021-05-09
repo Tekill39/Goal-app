@@ -21,7 +21,7 @@ export default function App() {
   const [userNumber, setUserNumber] = useState();
   const [guessRounds, setGuessRounds] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
-
+//Привет
   if (!dataLoaded){
     return (
       <AppLoading
