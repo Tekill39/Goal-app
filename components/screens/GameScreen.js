@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { Button, StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleSheet, View, Text, Alert, ScrollView } from 'react-native';
 import Card from '../Card';
 import NumberContainer from '../NumberContainer';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,12 +15,17 @@ const generateRandomBetween = (min, max, exclude) => {
       return rndNum;
     }
   };
+
+  const renderListItem = (value, numOfRound) =>(
+    <View key={value} style={styles.list}>
+      <Text>#{numOfRound}</Text>
+      <Text>{value}</Text>
+    </View>);
   
   const GameScreen = props => {
-    const [currentGuess, setCurrentGuess] = useState(
-      generateRandomBetween(1, 100, props.userChoice)
-    );
-    const [rounds, setRounds] = useState(0);
+    const initialGuess=generateRandomBetween(1, 100, props.userChoice)
+    const [currentGuess, setCurrentGuess] = useState(initialGuess);
+    const [pastGuesses, setPastGuesses] = useState([initialGuess]);
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
   
@@ -28,7 +33,7 @@ const generateRandomBetween = (min, max, exclude) => {
   
     useEffect(() => {
       if (currentGuess === userChoice) {
-        onGameOver(rounds);
+        onGameOver(pastGuesses.length);
       }
     }, [currentGuess, userChoice, onGameOver]);
   
@@ -45,7 +50,7 @@ const generateRandomBetween = (min, max, exclude) => {
       if (direction === 'lower') {
         currentHigh.current = currentGuess;
       } else {
-        currentLow.current = currentGuess;
+        currentLow.current = currentGuess + 1;
       }
       const nextNumber = generateRandomBetween(
         currentLow.current,
@@ -53,7 +58,8 @@ const generateRandomBetween = (min, max, exclude) => {
         currentGuess
       );
       setCurrentGuess(nextNumber);
-      setRounds(curRounds => curRounds + 1);
+      // setRounds(curRounds => curRounds + 1);
+      setPastGuesses(curPastGuesses=>[nextNumber,...curPastGuesses]);
     };
   
     return (
@@ -68,6 +74,11 @@ const generateRandomBetween = (min, max, exclude) => {
           <Ionicons name="md-add" size={24} color="white" /> 
           </MainButton>
         </Card>
+        <View style={styles.listContainer}>
+        <ScrollView>
+          {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length-index))}
+        </ScrollView>
+        </View>
       </View>
     );
   };
@@ -84,7 +95,20 @@ const styles = StyleSheet.create({
       marginTop:20,
       width:300,
       maxWidth:'80%'
-  }
+  },
+  list:{
+    borderColor:'#ccc',
+    borderWidth:1,
+    padding:15,
+    marginVertical:10,
+    backgroundColor:'white',
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  listContainer:{
+    width:'80%',
+    flex:1
+    }      
 });
 
 export default GameScreen;
