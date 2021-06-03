@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { StyleSheet, View, Text, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Alert, ScrollView, Dimensions } from 'react-native';
 import Card from '../Card';
 import NumberContainer from '../NumberContainer';
 import { Ionicons } from '@expo/vector-icons';
@@ -61,6 +61,10 @@ const generateRandomBetween = (min, max, exclude) => {
       // setRounds(curRounds => curRounds + 1);
       setPastGuesses(curPastGuesses=>[nextNumber,...curPastGuesses]);
     };
+       let listContainerStyle = styles.listContainer
+    if(Dimensions.get('window').width < 350 ){
+      listContainerStyle = styles.listContainer
+    }
   
     return (
       <View style={styles.screen}>
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
   buttonContainer:{
       flexDirection:'row',
       justifyContent:'space-around',
-      marginTop:20,
+      marginTop:Dimensions.get('window').height > 600 ? 30 : 10,
       width:300,
       maxWidth:'80%'
   },
@@ -106,8 +110,8 @@ const styles = StyleSheet.create({
     justifyContent:'space-between'
   },
   listContainer:{
-    width:'80%',
-    flex:1
+      flex:1,
+      width: Dimensions.get('window').width > 350 ? '60%' : '80%'
     }      
 });
 

@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
-import {View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
+import {View, Text, StyleSheet, Button, TouchableWithoutFeedback,
+   Keyboard, Alert, Dimensions, ScrollView} from 'react-native';
 import Card from '../Card';
 import Colors from './../../constans/colors';
 import Input from '../Input';
@@ -51,6 +52,7 @@ const StartGameScreen = props => {
     }
   
     return (
+      <ScrollView>
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
@@ -90,6 +92,7 @@ const StartGameScreen = props => {
           {confirmedOutput}
         </View>
       </TouchableWithoutFeedback>
+      </ScrollView>
     );
   };
   
@@ -109,7 +112,10 @@ const styles = StyleSheet.create({
         elevation:3,
         backgroundColor:'white',
         borderRadius:10,
-        padding:20      
+        padding:20,
+        maxWidth:'95%',
+        minWidth:290,
+             
     },
     buttonContainer:{
         flexDirection:'row',
@@ -118,8 +124,10 @@ const styles = StyleSheet.create({
         paddingHorizontal:15
     },
     button:{
-        width:100,
-        borderRadius:25
+        // width:100,
+        // borderRadius:25,
+        // margin:5
+        width:Dimensions.get('window').width / 4
     },
     input:{
         width:50,
@@ -128,6 +136,10 @@ const styles = StyleSheet.create({
     summaryContainer:{
         marginTop:20,
         alignItems:'center'
+    },
+    text:{
+      textAlign:'center',
+      fontSize:16
     }
 });
 export default StartGameScreen
